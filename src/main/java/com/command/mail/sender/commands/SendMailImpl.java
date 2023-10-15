@@ -25,12 +25,10 @@ public class SendMailImpl implements SendMail{
         try{
             Scanner scanner = new Scanner(System.in);
             MimeMessageHelper message = new MimeMessageHelper(send, true);
-            userInput.email(scanner);
-            message.setTo(scanner.nextLine());
-            System.out.println("Enter the Subject: ");
-            message.setSubject(scanner.nextLine());
-            System.out.println("Enter the body that you want: ");
-            message.setText(scanner.nextLine());
+
+            message.setTo(userInput.email(scanner));
+            message.setSubject(userInput.subject(scanner));
+            message.setText(userInput.textBody(scanner));
 
             return message;
         }
