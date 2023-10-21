@@ -44,8 +44,22 @@ public class UserInputImpl implements UserInput {
     * in a .txt file
     * */
     @Override
+    //Just need to add the simplified name of the file instead of full pathname
     public String[] attachments(Scanner input) {
-        return new String[0];
+        System.out.println("Type in the file path of files to attach\n" +
+                "Make sure to have all of the files in the same line separated by a space");
+        String files = input.nextLine();
+        String[] fileList = files.split("\\sC:"); //This would return the file without the C:
+        for(int i = 1; i < fileList.length; i++){
+            fileList[i] = "C:" + fileList[i]; //In here we add the C: at the beginning of the string giving it the absolute name of the string
+        }
+        //This is just a small change so that if a space was added at the end but their is no more files being added we can remove the space
+        //Most likely won't make much of a change for when we are adding the files but it would give me piece of mind
+        char[] checkSpace = fileList[fileList.length-1].toCharArray();
+        if(checkSpace[checkSpace.length-1] == ' '){
+            fileList[fileList.length-1] = fileList[fileList.length-1].substring(0, checkSpace.length-1);
+        }
+        return fileList;
     }
 
     /*

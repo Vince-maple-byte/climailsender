@@ -95,7 +95,27 @@ class UserInputImplTest {
 
     @Test
     @Disabled
-    void canGetAttachments() {
+    void canGetAttachmentsAsStringArray() {
+        //Given
+        String input = "C:\\Users\\BunnySoo\\Documents\\Computer Science books\\School\\compnetworks.pdf " +
+                "C:\\Users\\BunnySoo\\Documents\\Computer Science books\\Algorithms-4th-Edition.pdf " +
+                "C:\\Users\\BunnySoo\\Downloads\\Salif-cover-letter.pdf " +
+                "C:\\Users\\BunnySoo\\Documents\\Job resume\\Iverson Tech Resume.pdf ";
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(input.getBytes());
+        System.setIn(inputStream);
+        Scanner scanner = new Scanner(System.in);
+        String[] body = userInput.attachments(scanner);
+
+        //When
+        String[] list = {"C:\\Users\\BunnySoo\\Documents\\Computer Science books\\School\\compnetworks.pdf",
+                "C:\\Users\\BunnySoo\\Documents\\Computer Science books\\Algorithms-4th-Edition.pdf",
+                "C:\\Users\\BunnySoo\\Downloads\\Salif-cover-letter.pdf",
+                "C:\\Users\\BunnySoo\\Documents\\Job resume\\Iverson Tech Resume.pdf"
+        };
+
+        //Then
+        assertThat(body).isEqualTo(list);
+        //assertThat(body.length).isEqualTo(list.length);
     }
 
     @Test

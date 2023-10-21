@@ -1,5 +1,6 @@
 package com.command.mail.sender.commands;
 
+import com.command.mail.sender.input.FileCreationImpl;
 import com.command.mail.sender.input.UserInputImpl;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -10,6 +11,8 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -20,11 +23,13 @@ public class SendMailImpl implements SendMail{
     JavaMailSender javaMailSender;
     @Autowired
     UserInputImpl userInput;
+    FileCreationImpl fileCreation = new FileCreationImpl();
 
     public SendMailImpl(JavaMailSender javaMailSender, UserInputImpl userInput) {
     }
 
     @Override
+    //Just need to add the simplified name of the file instead of full pathname
     public MimeMessageHelper createMimeMessageHelper(MimeMessage send) {
         try{
             Scanner scanner = new Scanner(System.in);
@@ -34,11 +39,18 @@ public class SendMailImpl implements SendMail{
             message.setSubject(userInput.subject(scanner));
             message.setText(userInput.textBody(scanner));
 
-            System.out.println(message.getMimeMessage());
+            System.out.println("When entering file attachments/inline elements, " +
+                    "we can not guarantee if the files would go through do to email server limitations");
+
+            String[] attachmentString = userInput.attachments(scanner);
+            File[] attachmentList = fileCreation.createFileFromString(attachmentString);
+            for(int i = 0; i < attachmentList.length; i++){
+                message.addAttachment(attachmentList[i].getName(), attachmentList[i]);
+            }
 
             return message;
         }
-        catch(MessagingException e){
+        catch(MessagingException | FileNotFoundException e){
             e.printStackTrace();
         }
         return null;
