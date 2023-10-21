@@ -10,6 +10,7 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 @ShellComponent
@@ -19,6 +20,9 @@ public class SendMailImpl implements SendMail{
     JavaMailSender javaMailSender;
     @Autowired
     UserInputImpl userInput;
+
+    public SendMailImpl(JavaMailSender javaMailSender, UserInputImpl userInput) {
+    }
 
     @Override
     public MimeMessageHelper createMimeMessageHelper(MimeMessage send) {
@@ -30,6 +34,8 @@ public class SendMailImpl implements SendMail{
             message.setSubject(userInput.subject(scanner));
             message.setText(userInput.textBody(scanner));
 
+            System.out.println(message.getMimeMessage());
+
             return message;
         }
         catch(MessagingException e){
@@ -40,12 +46,11 @@ public class SendMailImpl implements SendMail{
 
     @Override
     @ShellMethod(key = "sendEmail", value="This command sends an email to the specified email address")
-    public void sendMessage() {
+    public void sendMessage(){
 
         MimeMessage send = javaMailSender.createMimeMessage();
         MimeMessageHelper message = createMimeMessageHelper(send);
 
         javaMailSender.send(send);
-        System.out.println("Successful");
     }
 }

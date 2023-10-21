@@ -1,14 +1,27 @@
 package com.command.mail.sender.input;
 
+import jakarta.mail.internet.AddressException;
+import jakarta.mail.internet.InternetAddress;
+import org.springframework.stereotype.Component;
+
 import java.util.Scanner;
 
+@Component
 public class UserInputImpl implements UserInput {
 
     //For safe practices we need to use the Address class where we can verify the email is valid
     @Override
-    public String email(Scanner input) {
-        System.out.println("Enter an email");
-        return input.nextLine();
+    public String email(Scanner input) throws AddressException{
+        try{
+            System.out.println("Enter an email:");
+            String result = input.nextLine();
+            InternetAddress email = new InternetAddress(result);
+            email.validate();
+
+            return email.getAddress();
+        } catch (AddressException e){
+            throw new AddressException("Email is invalid");
+        }
     }
     @Override
     public String subject(Scanner input) {
