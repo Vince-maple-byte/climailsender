@@ -2,16 +2,19 @@ package com.command.mail.sender.input;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 public class FileCreationImpl implements FileCreation{
     @Override
-    public File[] createFileFromString(String[] filePath) throws FileNotFoundException {
-        File[] fileList = new File[filePath.length];
+    public ArrayList<File> createFileFromString(ArrayList<String> filePath) throws FileNotFoundException {
+        ArrayList<File> fileList = new ArrayList<>();
 
-        for(int i = 0; i < filePath.length; i++){
-            fileList[i] = new File(filePath[i]);
-            if(!(fileList[i].exists())){
-                throw new FileNotFoundException("File does not exist " + filePath[i]);
+        for (String s : filePath) {
+            File file = new File(s);
+            if (!file.exists()) {
+                System.out.println("File: " + s + " does not exist.");
+            } else {
+                fileList.add(file);
             }
         }
 

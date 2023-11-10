@@ -14,6 +14,7 @@ import org.springframework.shell.standard.ShellOption;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 @ShellComponent
@@ -37,20 +38,21 @@ public class SendMailImpl implements SendMail{
 
             message.setTo(userInput.email(scanner));
             message.setSubject(userInput.subject(scanner));
-            message.setText(userInput.textBody(scanner));
+            message.setText(userInput.textBody(scanner), false);
 
             System.out.println("When entering file attachments/inline elements, " +
                     "we can not guarantee if the files would go through do to email server limitations");
 
-            String[] attachmentString = userInput.attachments(scanner);
-            File[] attachmentList = fileCreation.createFileFromString(attachmentString);
-            for(int i = 0; i < attachmentList.length; i++){
-                message.addAttachment(attachmentList[i].getName(), attachmentList[i]);
+            ArrayList<String> attachmentString = userInput.attachments(scanner);
+            ArrayList<File> attachmentList = fileCreation.createFileFromString(attachmentString);
+            for (File file : attachmentList) {
+                message.addAttachment(file.getName(), file);
             }
+            
 
             return message;
         }
-        catch(MessagingException | FileNotFoundException e){
+        catch(MessagingException | FileNotFoundException e ){
             e.printStackTrace();
         }
         return null;

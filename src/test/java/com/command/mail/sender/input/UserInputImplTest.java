@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import static org.assertj.core.api.Assertions.*;
@@ -94,24 +95,24 @@ class UserInputImplTest {
     }
 
     @Test
-    @Disabled
     void canGetAttachmentsAsStringArray() {
         //Given
-        String input = "C:\\Users\\BunnySoo\\Documents\\Computer Science books\\School\\compnetworks.pdf " +
-                "C:\\Users\\BunnySoo\\Documents\\Computer Science books\\Algorithms-4th-Edition.pdf " +
-                "C:\\Users\\BunnySoo\\Downloads\\Salif-cover-letter.pdf " +
-                "C:\\Users\\BunnySoo\\Documents\\Job resume\\Iverson Tech Resume.pdf ";
+        String input = "\"C:\\Users\\BunnySoo\\Documents\\Computer Science books\\School\\compnetworks.pdf\" " +
+                "\"C:\\Users\\BunnySoo\\Documents\\Computer Science books\\Algorithms-4th-Edition.pdf\" " +
+                "\"C:\\Users\\BunnySoo\\Downloads\\Salif-cover-letter.pdf\" " +
+                "\"C:\\Users\\BunnySoo\\Documents\\Job resume\\Iverson Tech Resume.pdf\" ";
         ByteArrayInputStream inputStream = new ByteArrayInputStream(input.getBytes());
         System.setIn(inputStream);
         Scanner scanner = new Scanner(System.in);
-        String[] body = userInput.attachments(scanner);
+        ArrayList<String> body = userInput.attachments(scanner);
 
         //When
-        String[] list = {"C:\\Users\\BunnySoo\\Documents\\Computer Science books\\School\\compnetworks.pdf",
-                "C:\\Users\\BunnySoo\\Documents\\Computer Science books\\Algorithms-4th-Edition.pdf",
-                "C:\\Users\\BunnySoo\\Downloads\\Salif-cover-letter.pdf",
-                "C:\\Users\\BunnySoo\\Documents\\Job resume\\Iverson Tech Resume.pdf"
-        };
+        ArrayList<String> list = new ArrayList<>();
+
+        list.add("C:\\Users\\BunnySoo\\Documents\\Computer Science books\\School\\compnetworks.pdf");
+        list.add("C:\\Users\\BunnySoo\\Documents\\Computer Science books\\Algorithms-4th-Edition.pdf");
+        list.add("C:\\Users\\BunnySoo\\Downloads\\Salif-cover-letter.pdf");
+        list.add("C:\\Users\\BunnySoo\\Documents\\Job resume\\Iverson Tech Resume.pdf");
 
         //Then
         assertThat(body).isEqualTo(list);
