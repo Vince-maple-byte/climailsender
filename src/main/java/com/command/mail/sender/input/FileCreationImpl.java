@@ -20,4 +20,8 @@ public class FileCreationImpl implements FileCreation{
 
         return fileList;
     }
+
+    //TODO need to make a method for handling the inline element files by converting them string to a file
+
+
 }

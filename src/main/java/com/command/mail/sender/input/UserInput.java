@@ -13,6 +13,7 @@ public interface UserInput {
     public String subject(Scanner input);
     public String email(Scanner input) throws AddressException;
     public String textBody(Scanner input);
+
     //Going to need to have two String elements to add attachments, filename and location of file
     public ArrayList<String> attachments(Scanner input);
     public String[] inlineElements(Scanner input);

@@ -4,13 +4,14 @@ import jakarta.mail.internet.AddressException;
 import jakarta.mail.internet.InternetAddress;
 import org.springframework.stereotype.Component;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 @Component
 public class UserInputImpl implements UserInput {
 
-    //For safe practices we need to use the Address class where we can verify the email is valid
+    //FINISHED: For safe practices we need to use the Address class where we can verify the email is valid
     @Override
     public String email(Scanner input) throws AddressException{
         try{
@@ -30,20 +31,35 @@ public class UserInputImpl implements UserInput {
         return input.nextLine();
     }
 
-    //Im going to make another method for file input (might do this in another class)
-    //In which we have the user be able to give a .txt and submit it as the text body
+
+    //TODO need to make another method for the file input where the user can give a .txt and submit it as the text body
     @Override
     public String textBody(Scanner input) {
         System.out.println("Enter the body that you want: ");
-        return input.nextLine();
+        String textBody = input.nextLine();
+        if(textBody.endsWith(".txt")) return fileToTextBody(textBody);
+        else return textBody;
     }
 
-    /*
-    * Need to use the URI class to validate and get the class path of the attachments
-    * that they give me.
-    * Might even have the option of the user being able to write all of the attachments that they want
-    * in a .txt file
-    * */
+    private String fileToTextBody(String pathName){
+        StringBuilder text = new StringBuilder();
+        File file = new File(pathName);
+        if(!file.exists()) return "File: " + pathName + " does not exist";
+        if(!file.canRead()) return "File: " + pathName + " does not have reading permission.";
+
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+            String input = "";
+            while((input = bufferedReader.readLine()) != null){
+                text.append(input);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return text.toString();
+    }
+
     @Override
     //Just need to add the simplified name of the file instead of full pathname
     public ArrayList<String> attachments(Scanner input) {
@@ -59,7 +75,6 @@ public class UserInputImpl implements UserInput {
             if(file.charAt(file.length()-1) == '"') file = file.substring(0, file.length()-1);
             fileInput.add(file);
         }
-
 
         /*We are doing the below in order to fix the issue of when we have spaces in the middle of the file path
         and when we save the input to the array fileInput it would have each element be separated by a space instead

@@ -100,7 +100,7 @@ class UserInputImplTest {
         String input = "\"C:\\Users\\BunnySoo\\Documents\\Computer Science books\\School\\compnetworks.pdf\" " +
                 "\"C:\\Users\\BunnySoo\\Documents\\Computer Science books\\Algorithms-4th-Edition.pdf\" " +
                 "\"C:\\Users\\BunnySoo\\Downloads\\Salif-cover-letter.pdf\" " +
-                "\"C:\\Users\\BunnySoo\\Documents\\Job resume\\Iverson Tech Resume.pdf\" ";
+                "\"C:\\Users\\BunnySoo\\Documents\\Job resume\\Iverson Tech Resume.pdf\" q";
         ByteArrayInputStream inputStream = new ByteArrayInputStream(input.getBytes());
         System.setIn(inputStream);
         Scanner scanner = new Scanner(System.in);

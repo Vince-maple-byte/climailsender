@@ -30,7 +30,7 @@ public class SendMailImpl implements SendMail{
     }
 
     @Override
-    //Just need to add the simplified name of the file instead of full pathname
+
     public MimeMessageHelper createMimeMessageHelper(MimeMessage send) {
         try{
             Scanner scanner = new Scanner(System.in);
