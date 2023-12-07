@@ -30,7 +30,6 @@ public class SendMailImpl implements SendMail{
     }
 
     @Override
-
     public MimeMessageHelper createMimeMessageHelper(MimeMessage send) {
         try{
             Scanner scanner = new Scanner(System.in);

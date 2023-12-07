@@ -76,8 +76,6 @@ class UserInputImplTest {
         assertThat(expected).isEqualTo(subject);
     }
 
-
-
     @Test
     void canGetTextBodyAsString() {
         //given
@@ -89,6 +87,51 @@ class UserInputImplTest {
 
         //when
         String expected = "Text Body";
+
+        //then
+        assertThat(expected).isEqualTo(body);
+    }
+
+    @Test
+    void canGetATextBodyFromTextFile() {
+        String input = "\"C:\\Users\\BunnySoo\\Desktop\\dadjoke.txt\"";
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(input.getBytes());
+        System.setIn(inputStream);
+        Scanner scanner = new Scanner(System.in);
+        String body = userInput.textBody(scanner);
+
+        //when
+        String expected = "Singing in the shower is fun until you get soap in your mouth. Then it's a soap opera.";
+
+        //then
+        assertThat(expected).isEqualTo(body);
+    }
+
+    @Test
+    void canNotGetATestBodyFromTextFileSinceItDoesNotExist() {
+        String input = "C:\\Users\\BunnySoo\\Document\\dadjoke.txt";
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(input.getBytes());
+        System.setIn(inputStream);
+        Scanner scanner = new Scanner(System.in);
+        String body = userInput.textBody(scanner);
+
+        //when
+        String expected = "File: " + input + " does not exist";
+
+        //then
+        assertThat(expected).isEqualTo(body);
+    }
+
+    @Test
+    void canNotGetATestBodyFromTextFileSinceThePermissionsAreHidden() {
+        String input = "\"C:\\Users\\BunnySoo\\Documents\\Job resume\\justdance.txt\"";
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(input.getBytes());
+        System.setIn(inputStream);
+        Scanner scanner = new Scanner(System.in);
+        String body = userInput.textBody(scanner);
+
+        //when
+        String expected = "File: " + input + " does not have reading permission.";
 
         //then
         assertThat(expected).isEqualTo(body);

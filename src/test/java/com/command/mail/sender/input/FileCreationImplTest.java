@@ -63,25 +63,18 @@ class FileCreationImplTest {
         assertThat(files.get(1)).isEqualTo(filesExpected[1]);
     }
 
-    //TODO Need to fix this unit test so that it checks if the assertThat of one string does not equal to the expected outcome
     @Test
     void canNotCreateFileFromAString() throws FileNotFoundException {
         //given
-        Mockito.when(userInput.attachments(scanner)).thenReturn(
-                new ArrayList<>(Arrays.asList("C:\\Users\\BunnySoo\\Documents\\Computer Science books\\Algorithms-4th-Edition.pdf",
-                        "C:\\Users\\BunnySoo\\Documents\\Computer Science books\\Abraham Silberschatz, Greg Gagne, P"))
-
-        );
+        ArrayList<String> list = new ArrayList<>(Arrays.asList("C:\\Users\\BunnySoo\\Documents\\Computer Science books\\Algorithms-4th-Edition.pdf",
+                "C:\\Users\\BunnySoo\\Documents\\Computer Science books\\Abraham Silberschatz, Greg Gagne, P"));
+        Mockito.when(userInput.attachments(scanner)).thenReturn(list);
 
         ArrayList<String> filesAsString = userInput.attachments(scanner);
-
-        System.out.println(filesAsString.get(0));
+        ArrayList<File> files = fileCreation.createFileFromString(filesAsString);
+        int correctSize = list.size();
 
         //When Then
-        assertThat(1).isNotEqualTo(4);
-//        assertThat(filesAstring.get(0))
-//        assertThatThrownBy(() -> fileCreation.createFileFromString(filesAsString))
-//                .isInstanceOf(FileNotFoundException.class)
-//                .hasMessageContaining("File does not exist");
+        assertThat(files.size()).isNotEqualTo(list.size());
     }
 }

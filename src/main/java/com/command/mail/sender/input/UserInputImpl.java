@@ -31,17 +31,16 @@ public class UserInputImpl implements UserInput {
         return input.nextLine();
     }
 
-
-    //TODO need to make another method for the file input where the user can give a .txt and submit it as the text body
     @Override
     public String textBody(Scanner input) {
         System.out.println("Enter the body that you want: ");
         String textBody = input.nextLine();
-        if(textBody.endsWith(".txt")) return fileToTextBody(textBody);
+        if(textBody.endsWith(".txt") || textBody.substring(0, textBody.length()-1).endsWith(".txt")) return fileToTextBody(textBody);
         else return textBody;
     }
 
     private String fileToTextBody(String pathName){
+        if(pathName.endsWith("\""))pathName = pathName.substring(1, pathName.length()-1);
         StringBuilder text = new StringBuilder();
         File file = new File(pathName);
         if(!file.exists()) return "File: " + pathName + " does not exist";
@@ -53,6 +52,7 @@ public class UserInputImpl implements UserInput {
             while((input = bufferedReader.readLine()) != null){
                 text.append(input);
             }
+            bufferedReader.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
