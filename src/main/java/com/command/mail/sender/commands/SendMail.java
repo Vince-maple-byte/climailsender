@@ -4,10 +4,14 @@ import jakarta.mail.internet.MimeMessage;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.shell.standard.ShellOption;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public interface SendMail {
 
-    public MimeMessageHelper createMimeMessageHelper(MimeMessage send);
-    public void sendMessage();
+
+    public void simpleMessage(@ShellOption(value = {"-m", "--message"},
+            defaultValue = "")String test) throws MessagingException;
+    public void sendAttachments() throws MessagingException, FileNotFoundException;
+    public void sendHtml() throws MessagingException;
 }

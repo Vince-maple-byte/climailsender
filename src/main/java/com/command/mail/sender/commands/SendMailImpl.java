@@ -30,39 +30,72 @@ public class SendMailImpl implements SendMail{
     }
 
     @Override
-    public MimeMessageHelper createMimeMessageHelper(MimeMessage send) {
-        try{
-            Scanner scanner = new Scanner(System.in);
-            MimeMessageHelper message = new MimeMessageHelper(send, true);
-
-            message.setTo(userInput.email(scanner));
-            message.setSubject(userInput.subject(scanner));
-            message.setText(userInput.textBody(scanner), false);
-
-            System.out.println("When entering file attachments/inline elements, " +
-                    "we can not guarantee if the files would go through do to email server limitations");
-
-            ArrayList<String> attachmentString = userInput.attachments(scanner);
-            ArrayList<File> attachmentList = fileCreation.createFileFromString(attachmentString);
-            for (File file : attachmentList) {
-                message.addAttachment(file.getName(), file);
-            }
-            
-
-            return message;
+    @ShellMethod(key = "simpleMessage", value="This command sends an simple email to the specified " +
+            "email address.\n You cannot include attachments with this command, " +
+            "to do this use sendAttachments.")
+    public void simpleMessage(
+            @ShellOption(value = {"-f", "--fileInput"}, defaultValue = "")
+            String fileInputLocation) throws MessagingException {
+        if(!fileInputLocation.isEmpty()){
+            //Where the text body of the email is going to be set with the contents of a text file
+            System.out.println("Options work perfectly!!!! " + fileInputLocation);
+            return;
         }
-        catch(MessagingException | FileNotFoundException e ){
-            e.printStackTrace();
-        }
-        return null;
+        Scanner scanner = new Scanner(System.in);
+        MimeMessage send = javaMailSender.createMimeMessage();
+        MimeMessageHelper message = new MimeMessageHelper(send, true);
+
+        message.setTo(userInput.email(scanner));
+        message.setSubject(userInput.subject(scanner));
+        message.setText(userInput.textBody(scanner), false);
+
+        javaMailSender.send(send);
     }
 
     @Override
-    @ShellMethod(key = "sendEmail", value="This command sends an email to the specified email address")
-    public void sendMessage(){
-
+    @ShellMethod(key = "sendAttachments", value="This command sends an email to the specified email address" +
+            "with attachments included")
+    public void sendAttachments() throws MessagingException, FileNotFoundException {
+        Scanner scanner = new Scanner(System.in);
         MimeMessage send = javaMailSender.createMimeMessage();
-        MimeMessageHelper message = createMimeMessageHelper(send);
+        MimeMessageHelper message = new MimeMessageHelper(send, true);
+
+        message.setTo(userInput.email(scanner));
+        message.setSubject(userInput.subject(scanner));
+        message.setText(userInput.textBody(scanner), false);
+
+        System.out.println("When entering file attachments/inline elements, " +
+                "we can not guarantee if the files would go through do to email server limitations");
+
+        ArrayList<String> attachmentString = userInput.attachments(scanner);
+        ArrayList<File> attachmentList = fileCreation.createFileFromString(attachmentString);
+        for (File file : attachmentList) {
+            message.addAttachment(file.getName(), file);
+        }
+
+        javaMailSender.send(send);
+    }
+
+    @Override
+    @ShellMethod(key = "sendHtml", value="This command sends an html emails with images, videos, etc" +
+            " being embedded into. ")
+    public void sendHtml() throws MessagingException {
+        Scanner scanner = new Scanner(System.in);
+        MimeMessage send = javaMailSender.createMimeMessage();
+        MimeMessageHelper message = new MimeMessageHelper(send, true);
+
+        message.setTo(userInput.email(scanner));
+        message.setSubject(userInput.subject(scanner));
+        message.setText(userInput.textBody(scanner), false);
+
+//        System.out.println("When entering file attachments/inline elements, " +
+//                "we can not guarantee if the files would go through do to email server limitations");
+//
+//        ArrayList<String> attachmentString = userInput.attachments(scanner);
+//        ArrayList<File> attachmentList = fileCreation.createFileFromString(attachmentString);
+//        for (File file : attachmentList) {
+//            message.addAttachment(file.getName(), file);
+//        }
 
         javaMailSender.send(send);
     }
