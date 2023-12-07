@@ -1,2 +1,2 @@
 # Cli Mail Sender
-A cli tool for sending email made in Java
+A cli tool for sending emails made in Java
