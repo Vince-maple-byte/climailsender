@@ -79,24 +79,47 @@ public class SendMailImpl implements SendMail{
     @Override
     @ShellMethod(key = "sendHtml", value="This command sends an html emails with images, videos, etc" +
             " being embedded into. ")
-    public void sendHtml() throws MessagingException {
+    public void sendHtml(
+            @ShellOption(value = {"-h, --html"}, defaultValue = "") String htmlFileLocation
+    ) throws MessagingException, IOException {
         Scanner scanner = new Scanner(System.in);
         MimeMessage send = javaMailSender.createMimeMessage();
         MimeMessageHelper message = new MimeMessageHelper(send, true);
 
         message.setTo(userInput.email(scanner));
         message.setSubject(userInput.subject(scanner));
-        message.setText(userInput.textBody(scanner), false);
+        String[] contentId;
+        ArrayList<String> inlineElements;
+        File htmlFile;
+        String htmlText = "";
 
-//        System.out.println("When entering file attachments/inline elements, " +
-//                "we can not guarantee if the files would go through do to email server limitations");
-//
-//        ArrayList<String> attachmentString = userInput.attachments(scanner);
-//        ArrayList<File> attachmentList = fileCreation.createFileFromString(attachmentString);
-//        for (File file : attachmentList) {
-//            message.addAttachment(file.getName(), file);
-//        }
+        if(htmlFileLocation.isEmpty()){
+            htmlFile = fileCreation.createHtmlFile(scanner);
 
+        }else{
+            htmlFile = new File(htmlFileLocation);
+        }
+        htmlText = fileCreation.convertHtmlFileIntoAString(htmlFile);
+        contentId = userInput.getContentIdFromHtml(htmlText);
+        inlineElements = userInput.inlineElements(scanner);
+        ArrayList<File> inlineFiles = fileCreation.createFileFromString(inlineElements);
+        message.setText(htmlText, true);
+
+        message.setText(htmlText);
+        for(int i = 0; i < contentId.length; i++){
+            message.addInline(contentId[i], inlineFiles.get(i));
+        }
+
+        /*What is going to be done here:
+        * Get the html file path and Make a file object createHtmlFile()
+        * Convert the contents of the html file object into a String convertHtmlFileIntoAString()
+        *
+        * get the content-id from the html String getContentIdFromHtml()
+        * get the inline element file inlineElements()
+        *
+        * use a while loop to add each inline elements message.addInline()
+        *
+        */
         javaMailSender.send(send);
     }
 }

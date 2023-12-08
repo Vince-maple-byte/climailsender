@@ -6,7 +6,11 @@ import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Component
 public class UserInputImpl implements UserInput {
@@ -115,11 +119,13 @@ public class UserInputImpl implements UserInput {
     }
 
     /*
-    * This are for things that can be displayed on the email itself such as images, */
+    * This method for getting the all the files that are going embedded in the html file */
+    //TODO Need to make unit test to test this method out inlineElements
     @Override
-    public String[] inlineElements(Scanner input) {
+    public ArrayList<String> inlineElements(Scanner input) {
         System.out.println("Type in the file path of files you want to be embedded in your html email\n" +
-                "Make sure to have all of the files in the same line separated by a space");
+                "Make sure to have all of the files in the same line separated by a space; " +
+                "and have it in the same order as the content-id's that you want them to be associated with.");
         String files = input.nextLine();
         String[] fileList = files.split("\\sC:"); //This would return the file without the C:
         for(int i = 1; i < fileList.length; i++){
@@ -131,7 +137,25 @@ public class UserInputImpl implements UserInput {
         if(checkSpace[checkSpace.length-1] == ' '){
             fileList[fileList.length-1] = fileList[fileList.length-1].substring(0, checkSpace.length-1);
         }
-        return fileList;
+        return new ArrayList<>(Arrays.asList(fileList));
     }
+
+    //TODO test this method out getContentIdFromHtml
+    @Override
+    public String[] getContentIdFromHtml(String htmlText) {
+        String regex = "cid:(.*?)";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(htmlText);
+
+
+        List<String> matches = new ArrayList<>();
+
+        while (matcher.find()) {
+            matches.add(matcher.group(1));
+        }
+        return matches.toArray(new String[0]);
+    }
+
+
 }
 

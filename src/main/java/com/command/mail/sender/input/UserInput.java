@@ -16,5 +16,8 @@ public interface UserInput {
 
     //Going to need to have two String elements to add attachments, filename and location of file
     public ArrayList<String> attachments(Scanner input);
-    public String[] inlineElements(Scanner input);
+    public ArrayList<String> inlineElements(Scanner input);
+
+    public String[] getContentIdFromHtml(String html);
+
 }

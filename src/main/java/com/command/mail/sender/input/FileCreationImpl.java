@@ -2,7 +2,11 @@ package com.command.mail.sender.input;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class FileCreationImpl implements FileCreation{
     @Override
@@ -21,7 +25,23 @@ public class FileCreationImpl implements FileCreation{
         return fileList;
     }
 
-    //TODO need to make a method for handling the inline element files by converting them string to a file
+    //Is going to create the File object from the html file path
+    //TODO Need to make unit test to test this method createHtmlFile
+    @Override
+    public File createHtmlFile(Scanner input) {
+        System.out.println("Type in the file path of the .html file");
+        return new File(input.nextLine());
+    }
+
+    //Converts the File object contents into a String that c
+    //TODO test this method out convertHtmlFileIntoAString
+    @Override
+    public String convertHtmlFileIntoAString(File html) throws IOException {
+        byte[] encoded = Files.readAllBytes(html.toPath());
+        return new String(encoded, StandardCharsets.UTF_8);
+    }
+
+
 
 
 }

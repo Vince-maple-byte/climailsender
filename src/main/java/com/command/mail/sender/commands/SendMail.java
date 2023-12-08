@@ -13,5 +13,6 @@ public interface SendMail {
     public void simpleMessage(@ShellOption(value = {"-m", "--message"},
             defaultValue = "")String test) throws MessagingException;
     public void sendAttachments() throws MessagingException, FileNotFoundException;
-    public void sendHtml() throws MessagingException;
+    public void sendHtml(@ShellOption(value = {"-h, --html"}, defaultValue = "")
+                         String htmlText) throws MessagingException, IOException;
 }
