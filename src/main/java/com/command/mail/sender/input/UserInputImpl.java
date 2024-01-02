@@ -43,7 +43,7 @@ public class UserInputImpl implements UserInput {
         else return textBody;
     }
 
-    private String fileToTextBody(String pathName){
+    public String fileToTextBody(String pathName){
         if(pathName.endsWith("\""))pathName = pathName.substring(1, pathName.length()-1);
         StringBuilder text = new StringBuilder();
         File file = new File(pathName);

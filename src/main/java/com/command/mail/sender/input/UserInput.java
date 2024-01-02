@@ -19,7 +19,6 @@ public interface UserInput {
 
     /*
     * This method for getting the all the files that are going embedded in the html file */
-    //TODO Need to make unit test to test this method out inlineElements
     public ArrayList<String> inlineElements(Scanner input, int amountOfContentIDs);
 
     public String[] getContentIdFromHtml(String html);

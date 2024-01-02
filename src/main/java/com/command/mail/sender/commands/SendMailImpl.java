@@ -34,28 +34,31 @@ public class SendMailImpl implements SendMail{
             "email address.\n You cannot include attachments with this command, " +
             "to do this use sendAttachments.")
     public void simpleMessage(
-            @ShellOption(value = {"-f", "--fileInput"}, defaultValue = "")
+            @ShellOption(value = {"-t", "--textFile"}, defaultValue = "")
             String fileInputLocation) throws MessagingException {
-        if(!fileInputLocation.isEmpty()){
-            //Where the text body of the email is going to be set with the contents of a text file
-            System.out.println("Options work perfectly!!!! " + fileInputLocation);
-            return;
-        }
+
         Scanner scanner = new Scanner(System.in);
         MimeMessage send = javaMailSender.createMimeMessage();
         MimeMessageHelper message = new MimeMessageHelper(send, true);
 
         message.setTo(userInput.email(scanner));
         message.setSubject(userInput.subject(scanner));
-        message.setText(userInput.textBody(scanner), false);
+
+        if(fileInputLocation.isEmpty())
+            message.setText(userInput.textBody(scanner), false);
+        else
+            message.setText(userInput.fileToTextBody(fileInputLocation));
 
         javaMailSender.send(send);
+        System.out.println("Successfully sent the email");
     }
 
     @Override
     @ShellMethod(key = "sendAttachments", value="This command sends an email to the specified email address" +
             "with attachments included")
-    public void sendAttachments() throws MessagingException, FileNotFoundException {
+    public void sendAttachments(
+            @ShellOption(value = {"-t", "--textFile"}, defaultValue = "") String fileInputLocation
+    ) throws MessagingException, FileNotFoundException {
         Scanner scanner = new Scanner(System.in);
         MimeMessage send = javaMailSender.createMimeMessage();
         MimeMessageHelper message = new MimeMessageHelper(send, true);
@@ -74,13 +77,15 @@ public class SendMailImpl implements SendMail{
         }
 
         javaMailSender.send(send);
+        System.out.println("Successfully sent the email");
     }
 
     @Override
     @ShellMethod(key = "sendHtml", value="This command sends an html emails with images, videos, etc" +
             " being embedded into it. ")
     public void sendHtml(
-            @ShellOption(value = {"-f", "--htmlFile"}, defaultValue = "") String htmlFileLocation
+            @ShellOption(value = {"-f", "--htmlFile"}, defaultValue = "") String htmlFileLocation,
+            @ShellOption(value = {"-a", "--attach"}, defaultValue = "false") boolean attach
     ) throws MessagingException, IOException {
         Scanner scanner = new Scanner(System.in);
         MimeMessage send = javaMailSender.createMimeMessage();
@@ -103,8 +108,10 @@ public class SendMailImpl implements SendMail{
         String[] contentId;
         ArrayList<String> inlineElements;
         File htmlFile;
+
         if(htmlFileLocation.isEmpty()) htmlFile = fileCreation.createHtmlFile(scanner);
         else htmlFile = new File(htmlFileLocation);
+
         String htmlText = fileCreation.convertHtmlFileIntoAString(htmlFile);
         contentId = userInput.getContentIdFromHtml(htmlText);
         inlineElements = userInput.inlineElements(scanner, contentId.length);
@@ -120,7 +127,22 @@ public class SendMailImpl implements SendMail{
             }
         }
 
+        //This code below allows for the user to add attachments to their email.
+        String ans = "";
+        if(!attach){
+            System.out.println("Do you want to enter an attachment? yes/no");
+            ans = scanner.next();
+        }
+
+        if(ans.equalsIgnoreCase("yes") || attach){
+            ArrayList<String> attachmentString = userInput.attachments(scanner);
+            ArrayList<File> attachmentList = fileCreation.createFileFromString(attachmentString);
+            for (File file : attachmentList) {
+                message.addAttachment(file.getName(), file);
+            }
+        }
 
         javaMailSender.send(send);
+        System.out.println("Successfully sent the email");
     }
 }
