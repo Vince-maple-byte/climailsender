@@ -35,3 +35,5 @@
 1704177315334:sendHtml -f C:\\Users\\BunnySoo\\Desktop\\html email\\email.html
 1704177398422:sendHtml -f "C:\\\\Users\\\\BunnySoo\\\\Desktop\\\\html email\\\\email.html"
 1704177655716:sendHtml
+1704180784256:sendHtml -f "C:\\Users\\BunnySoo\\Desktop\\html email\\email.html"
+1704181094657:sendHtml -f "C:\\Users\\\\BunnySoo\\\\Desktop\\\\html email\\\\email.html"

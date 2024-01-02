@@ -53,6 +53,12 @@ public class SendMailImpl implements SendMail{
         System.out.println("Successfully sent the email");
     }
 
+    /*TODO
+        Shell options I want add here:
+    *  textFile: gets the text body from a .txt file
+    *  attachmentDir: Have a directory for all of the attachments that the user wants to add
+    *  instead of typing it out one at a time
+    * */
     @Override
     @ShellMethod(key = "sendAttachments", value="This command sends an email to the specified email address" +
             "with attachments included")
@@ -65,7 +71,10 @@ public class SendMailImpl implements SendMail{
 
         message.setTo(userInput.email(scanner));
         message.setSubject(userInput.subject(scanner));
-        message.setText(userInput.textBody(scanner), false);
+        if(fileInputLocation.isEmpty())
+            message.setText(userInput.textBody(scanner), false);
+        else
+            message.setText(userInput.fileToTextBody(fileInputLocation));
 
         System.out.println("When entering file attachments/inline elements, " +
                 "we can not guarantee if the files would go through do to email server limitations");
@@ -80,6 +89,14 @@ public class SendMailImpl implements SendMail{
         System.out.println("Successfully sent the email");
     }
 
+    /*TODO
+        Shell options I want add here:
+     * textFile: gets the text body from a .txt file
+     * attachmentDir: Have a directory for all of the attachments that the user wants to add
+     *      instead of typing it out one at a time
+     * inlineElementDir: Have a directory for all of the inline elements that the user wants to add
+     *      instead of typing it out one at a time
+     */
     @Override
     @ShellMethod(key = "sendHtml", value="This command sends an html emails with images, videos, etc" +
             " being embedded into it. ")
@@ -110,7 +127,9 @@ public class SendMailImpl implements SendMail{
         File htmlFile;
 
         if(htmlFileLocation.isEmpty()) htmlFile = fileCreation.createHtmlFile(scanner);
-        else htmlFile = new File(htmlFileLocation);
+        else {
+            htmlFile = new File(htmlFileLocation); //User needs to use / in the file path or \\
+        }
 
         String htmlText = fileCreation.convertHtmlFileIntoAString(htmlFile);
         contentId = userInput.getContentIdFromHtml(htmlText);
