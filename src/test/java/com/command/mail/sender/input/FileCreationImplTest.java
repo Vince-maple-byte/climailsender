@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -77,4 +78,81 @@ class FileCreationImplTest {
         //When Then
         assertThat(files.size()).isNotEqualTo(list.size());
     }
+
+    @Test
+    void createHtmlFileGivesTheCorrectPathName(){
+        //Given
+        String htmlPathName = "C:\\Users\\BunnySoo\\Desktop\\html email\\email.html";
+        String input = "\"C:\\Users\\BunnySoo\\Desktop\\html email\\email.html\"";
+        //When
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(input.getBytes());
+        System.setIn(inputStream);
+        scanner = new Scanner(System.in);
+        File htmlFile = fileCreation.createHtmlFile(scanner);
+
+        //Then
+        assertThat(htmlFile.getPath()).isEqualTo(htmlPathName);
+    }
+
+    @Test
+    void convertHtmlFileIntoAStringGivesTheCorrectString() throws IOException {
+        //Given
+        String html = """
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Document</title>
+                </head>
+                <body>
+                    <img src="cid:unique-img" alt="">
+                    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus est id harum eos atque esse cumque. Incidunt accusamus\s
+                        sint laboriosam magni veritatis architecto voluptas? Reprehenderit consequuntur eius qui accusamus.</p>
+                    <img src="cid:unique-img2" alt="">
+                </body>
+                </html>""";
+        //When
+        File htmlFile = new File("C:\\Users\\BunnySoo\\Desktop\\html email\\email.html");
+        String htmlContents = fileCreation.convertHtmlFileIntoAString(htmlFile);
+        //Then
+        assertThat(normalizeLineSeparators(htmlContents)).isEqualTo(normalizeLineSeparators(html));
+
+        //This method practically works the only difference that the given string has CRLF and the method that returns a String has LF as a line separator
+    }
+
+    // Normalize line separators to a consistent format (CRLF)
+    private String normalizeLineSeparators(String input) {
+        return input.replace("\r\n", "\n").replace("\r", "\n").replace("\n", "\r\n");
+    }
+
+    @Test
+    void convertHtmlFileIntoAStringGivesTheIncorrectString() throws IOException {
+        //Given
+        String html = """
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Document</title>
+                </head>
+                <body>
+                    <img src="cid:unique-img" alt="">
+                    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus est id harum eos atque esse cumque. Incidunt accusamus\s
+                        sint laboriosam magni veritatis architecto voluptas? Reprehenderit consequuntur eius qui accusamus.</p>
+                    <img src="cid:unique-img2" alt="">
+                </body>
+                <;;;>
+                </html>""";
+        //When
+        File htmlFile = new File("C:\\Users\\BunnySoo\\Desktop\\html email\\email.html");
+        String htmlContents = fileCreation.convertHtmlFileIntoAString(htmlFile);
+        //Then
+        assertThat(normalizeLineSeparators(htmlContents)).isNotEqualTo(normalizeLineSeparators(html));
+
+        //This method practically works the only difference that the given string has CRLF and the method that returns a String has LF as a line separator
+    }
+
+
 }

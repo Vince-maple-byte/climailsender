@@ -26,15 +26,15 @@ public class FileCreationImpl implements FileCreation{
     }
 
     //Is going to create the File object from the html file path
-    //TODO Need to make unit test to test this method createHtmlFile
     @Override
     public File createHtmlFile(Scanner input) {
         System.out.println("Type in the file path of the .html file");
-        return new File(input.nextLine());
+        String file = input.nextLine();
+        if(file.charAt(0) == '"') file = file.substring(1, file.length()-1);
+        return new File(file);
     }
 
-    //Converts the File object contents into a String that c
-    //TODO test this method out convertHtmlFileIntoAString
+    //Converts the File object contents into a String
     @Override
     public String convertHtmlFileIntoAString(File html) throws IOException {
         byte[] encoded = Files.readAllBytes(html.toPath());

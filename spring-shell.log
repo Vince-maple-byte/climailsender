@@ -23,3 +23,15 @@
 1701917983954:quit
 1701918072742:simpleMessage -f "Kanii"
 1701989116633:sendHtml
+1704176574116:help
+1704176605179:sendHtml help
+1704176625371:help sendHtml
+1704176643201:sendHtml -h
+1704176652825:clear
+1704176771269:sendHtml --html "C:\\Users\\BunnySoo\\Desktop\\html email\\email.html"
+1704177117588:sendHtml -f @Override
+1704177135965:sendHtml -f "C:\\Users\\BunnySoo\\Desktop\\html email\\email.html"
+1704177210100:stacktrace
+1704177315334:sendHtml -f C:\\Users\\BunnySoo\\Desktop\\html email\\email.html
+1704177398422:sendHtml -f "C:\\\\Users\\\\BunnySoo\\\\Desktop\\\\html email\\\\email.html"
+1704177655716:sendHtml

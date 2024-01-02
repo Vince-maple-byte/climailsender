@@ -122,7 +122,8 @@ class UserInputImplTest {
         assertThat(expected).isEqualTo(body);
     }
 
-    @Test
+    //This test does not work since I can't figure out how to disable file permissions in my computer
+    @Disabled
     void canNotGetATestBodyFromTextFileSinceThePermissionsAreHidden() {
         String input = "\"C:\\Users\\BunnySoo\\Documents\\Job resume\\justdance.txt\"";
         ByteArrayInputStream inputStream = new ByteArrayInputStream(input.getBytes());
@@ -159,11 +160,55 @@ class UserInputImplTest {
 
         //Then
         assertThat(body).isEqualTo(list);
-        //assertThat(body.length).isEqualTo(list.length);
     }
 
     @Test
-    @Disabled
-    void canGetInlineElements() {
+    void canGetContentIdFromHtmlText(){
+        //Given
+        String html = """
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Document</title>
+                </head>
+                <body>
+                    <img src="cid:unique-img" alt="">
+                    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Necessitatibus repellendus est id harum eos atque esse cumque. Incidunt accusamus\s
+                        sint laboriosam magni veritatis architecto voluptas? Reprehenderit consequuntur eius qui accusamus.</p>
+                    <img src="cid:unique-img2" alt="">
+                </body>
+                </html>""";
+        //When
+        String[] contentId = userInput.getContentIdFromHtml(html);
+        //Then
+        assertThat(contentId.length).isEqualTo(2);
+        assertThat(contentId[0]).isEqualTo("unique-img");
+        assertThat(contentId[1]).isEqualTo("unique-img2");
+    }
+
+    @Test
+    void canGetInlineElementsFromUserInput(){
+        //Given
+        String input = "\"C:\\Users\\BunnySoo\\Documents\\Computer Science books\\School\\compnetworks.pdf\"\n " +
+                "\"C:\\Users\\BunnySoo\\Documents\\Computer Science books\\Algorithms-4th-Edition.pdf\" \n " +
+                "\"C:\\Users\\BunnySoo\\Downloads\\Salif-cover-letter.pdf\"\n " +
+                "\"C:\\Users\\BunnySoo\\Documents\\Job resume\\Iverson Tech Resume.pdf\"\n ";
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(input.getBytes());
+        System.setIn(inputStream);
+        Scanner scanner = new Scanner(System.in);
+        ArrayList<String> body = userInput.inlineElements(scanner, 4);
+
+        //When
+        ArrayList<String> list = new ArrayList<>();
+
+        list.add("C:\\Users\\BunnySoo\\Documents\\Computer Science books\\School\\compnetworks.pdf");
+        list.add("C:\\Users\\BunnySoo\\Documents\\Computer Science books\\Algorithms-4th-Edition.pdf");
+        list.add("C:\\Users\\BunnySoo\\Downloads\\Salif-cover-letter.pdf");
+        list.add("C:\\Users\\BunnySoo\\Documents\\Job resume\\Iverson Tech Resume.pdf");
+
+        //Then
+        assertThat(body).isEqualTo(list);
     }
 }

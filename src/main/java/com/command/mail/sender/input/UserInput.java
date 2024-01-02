@@ -16,7 +16,11 @@ public interface UserInput {
 
     //Going to need to have two String elements to add attachments, filename and location of file
     public ArrayList<String> attachments(Scanner input);
-    public ArrayList<String> inlineElements(Scanner input);
+
+    /*
+    * This method for getting the all the files that are going embedded in the html file */
+    //TODO Need to make unit test to test this method out inlineElements
+    public ArrayList<String> inlineElements(Scanner input, int amountOfContentIDs);
 
     public String[] getContentIdFromHtml(String html);
 
