@@ -89,8 +89,9 @@ public class SendMailImpl implements SendMail{
         System.out.println("When entering file attachments/inline elements, " +
                 "we can not guarantee if the files would go through do to email server limitations");
 
-        ArrayList<String> attachmentString = userInput.attachments(scanner);
+
         if(attachFolder.isEmpty()){
+            ArrayList<String> attachmentString = userInput.inputFileNames(scanner, false);
             ArrayList<File> attachmentList = fileCreation.createFileFromString(attachmentString);
             for (File file : attachmentList) {
                 message.addAttachment(file.getName(), file);
@@ -158,10 +159,8 @@ public class SendMailImpl implements SendMail{
         contentId = userInput.getContentIdFromHtml(htmlText);
         message.setText(htmlText, true);
 
-
-        inlineElements = userInput.inlineElements(scanner, contentId.length);
-
         if(inlineFolder.isEmpty()){
+            inlineElements = userInput.inputFileNames(scanner, true);
             inlineFiles = fileCreation.createFileFromString(inlineElements);
         }
         else {
@@ -173,14 +172,8 @@ public class SendMailImpl implements SendMail{
         }
 
         for(int i = 0; i < contentId.length; i++){
-            if(i >= inlineFiles.size()){
-                break;
-            }
-            else {
-                message.addInline(contentId[i], inlineFiles.get(i));
-            }
+            message.addInline(contentId[i], inlineFiles.get(i));
         }
-
         //This code below allows for the user to add attachments to their email.
         if(attachFolder.isEmpty()){
             String ans = "";
@@ -189,7 +182,7 @@ public class SendMailImpl implements SendMail{
                 ans = scanner.next();
             }
             if(ans.equalsIgnoreCase("yes") || attach){
-                ArrayList<String> attachmentString = userInput.attachments(scanner);
+                ArrayList<String> attachmentString = userInput.inputFileNames(scanner, false);
                 ArrayList<File> attachmentList = fileCreation.createFileFromString(attachmentString);
                 for (File file : attachmentList) {
                     message.addAttachment(file.getName(), file);
@@ -216,7 +209,9 @@ public class SendMailImpl implements SendMail{
         List<Path> files = new ArrayList<>();
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir)){
             for(Path path : stream){
-                files.add(path);
+                if (!Files.isHidden(path)) {
+                    files.add(path);
+                }
             }
         } catch (IOException e) {
             throw new RuntimeException(e);

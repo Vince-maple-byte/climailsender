@@ -141,14 +141,15 @@ class UserInputImplTest {
     @Test
     void canGetAttachmentsAsStringArray() {
         //Given
-        String input = "\"C:\\Users\\BunnySoo\\Documents\\Computer Science books\\School\\compnetworks.pdf\" " +
-                "\"C:\\Users\\BunnySoo\\Documents\\Computer Science books\\Algorithms-4th-Edition.pdf\" " +
-                "\"C:\\Users\\BunnySoo\\Downloads\\Salif-cover-letter.pdf\" " +
-                "\"C:\\Users\\BunnySoo\\Documents\\Job resume\\Iverson Tech Resume.pdf\" q";
+        String input = "\"C:\\Users\\BunnySoo\\Documents\\Computer Science books\\School\\compnetworks.pdf\" \n" +
+                "\"C:\\Users\\BunnySoo\\Documents\\Computer Science books\\Algorithms-4th-Edition.pdf\" \n" +
+                "\"C:\\Users\\BunnySoo\\Downloads\\Salif-cover-letter.pdf\" \n" +
+                "\"C:\\Users\\BunnySoo\\Documents\\Job resume\\Iverson Tech Resume.pdf\" \n" +
+                "q";
         ByteArrayInputStream inputStream = new ByteArrayInputStream(input.getBytes());
         System.setIn(inputStream);
         Scanner scanner = new Scanner(System.in);
-        ArrayList<String> body = userInput.attachments(scanner);
+        ArrayList<String> body = userInput.inputFileNames(scanner, false);
 
         //When
         ArrayList<String> list = new ArrayList<>();
@@ -191,14 +192,16 @@ class UserInputImplTest {
     @Test
     void canGetInlineElementsFromUserInput(){
         //Given
-        String input = "\"C:\\Users\\BunnySoo\\Documents\\Computer Science books\\School\\compnetworks.pdf\"\n " +
-                "\"C:\\Users\\BunnySoo\\Documents\\Computer Science books\\Algorithms-4th-Edition.pdf\" \n " +
-                "\"C:\\Users\\BunnySoo\\Downloads\\Salif-cover-letter.pdf\"\n " +
-                "\"C:\\Users\\BunnySoo\\Documents\\Job resume\\Iverson Tech Resume.pdf\"\n ";
+        String input = """
+                "C:\\Users\\BunnySoo\\Documents\\Computer Science books\\School\\compnetworks.pdf"
+                 "C:\\Users\\BunnySoo\\Documents\\Computer Science books\\Algorithms-4th-Edition.pdf"\s
+                 "C:\\Users\\BunnySoo\\Downloads\\Salif-cover-letter.pdf"
+                 "C:\\Users\\BunnySoo\\Documents\\Job resume\\Iverson Tech Resume.pdf"
+                quit""";
         ByteArrayInputStream inputStream = new ByteArrayInputStream(input.getBytes());
         System.setIn(inputStream);
         Scanner scanner = new Scanner(System.in);
-        ArrayList<String> body = userInput.inlineElements(scanner, 4);
+        ArrayList<String> body = userInput.inputFileNames(scanner, true);
 
         //When
         ArrayList<String> list = new ArrayList<>();

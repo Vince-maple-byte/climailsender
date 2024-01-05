@@ -44,13 +44,13 @@ class FileCreationImplTest {
     void canCreateFileFromAString() throws FileNotFoundException {
         //given
         ArrayList<String> listOfFileNames = new ArrayList<>();
-        Mockito.when(userInput.attachments(scanner)).thenReturn(
+        Mockito.when(userInput.inputFileNames(scanner, false)).thenReturn(
                 new ArrayList<>(Arrays.asList("C:\\Users\\BunnySoo\\Documents\\Computer Science books\\Algorithms-4th-Edition.pdf",
                         "C:\\Users\\BunnySoo\\Documents\\Computer Science books\\Abraham Silberschatz, Greg Gagne, " +
                                 "Peter B. Galvin - Operating System Concepts-Wiley (2018).pdf"))
 
         );
-        ArrayList<String> filesAsString = userInput.attachments(scanner);
+        ArrayList<String> filesAsString = userInput.inputFileNames(scanner, false);
         ArrayList<File> files = fileCreation.createFileFromString(filesAsString);
 
         //When
@@ -69,9 +69,9 @@ class FileCreationImplTest {
         //given
         ArrayList<String> list = new ArrayList<>(Arrays.asList("C:\\Users\\BunnySoo\\Documents\\Computer Science books\\Algorithms-4th-Edition.pdf",
                 "C:\\Users\\BunnySoo\\Documents\\Computer Science books\\Abraham Silberschatz, Greg Gagne, P"));
-        Mockito.when(userInput.attachments(scanner)).thenReturn(list);
+        Mockito.when(userInput.inputFileNames(scanner, false)).thenReturn(list);
 
-        ArrayList<String> filesAsString = userInput.attachments(scanner);
+        ArrayList<String> filesAsString = userInput.inputFileNames(scanner, false);
         ArrayList<File> files = fileCreation.createFileFromString(filesAsString);
         int correctSize = list.size();
 

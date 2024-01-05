@@ -37,3 +37,13 @@
 1704177655716:sendHtml
 1704180784256:sendHtml -f "C:\\Users\\BunnySoo\\Desktop\\html email\\email.html"
 1704181094657:sendHtml -f "C:\\Users\\\\BunnySoo\\\\Desktop\\\\html email\\\\email.html"
+1704429289668:sendAttachments -d C:\\\\Users\\\\BunnySoo\\\\Pictures\\\\Camera Roll -i C:\\\\Users\\\\BunnySoo\\\\Pictures\\\\Camera Roll
+1704429375545:sendAttachments -d
+1704429408351:sendAttachments -d C:\\\\Users\\\\BunnySoo\\\\Pictures\\\\Camera Roll
+1704429598950:sendAttachments -d "C:\\\\Users\\\\BunnySoo\\\\Pictures\\\\Camera Roll"
+1704430019874:sendHtml -f "C:\\\\Users\\\\BunnySoo\\\\Desktop\\\\html email" -d "C:\\\\Users\\\\BunnySoo\\\\Pictures\\\\Camera Roll" -i "C:\\\\Users\\\\BunnySoo\\\\Pictures\\\\Camera Roll"
+1704430046373:stacktrace
+1704430129706:sendHtml -f "C:\\\\Users\\\\BunnySoo\\\\Desktop\\\\html email" -d "C:\\\\Users\\\\BunnySoo\\\\Pictures\\\\Camera Roll" -i "C:\\\\Users\\\\BunnySoo\\\\Pictures\\\\Camera Roll"
+1704430492940:sendHtml -f "C:\\\\Users\\\\BunnySoo\\\\Desktop\\\\html email\\\\email.html" -d "C:\\\\Users\\\\BunnySoo\\\\Pictures\\\\Camera Roll" -i "C:\\\\Users\\\\BunnySoo\\\\Pictures\\\\Camera Roll"
+1704430712300:sendHtml -f "C:\\Users\\BunnySoo\\Desktop\\html email\\email.html" -d "C:\\\\Users\\\\BunnySoo\\\\Pictures\\\\Camera Roll" -i "C:\\\\Users\\\\BunnySoo\\\\Pictures\\\\Camera Roll"
+1704430755737:sendHtml -f "C:\\\\Users\\\\BunnySoo\\\\Desktop\\\\html email\\\\email.html" -d "C:\\\\Users\\\\BunnySoo\\\\Pictures\\\\Camera Roll" -i "C:\\\\Users\\\\BunnySoo\\\\Pictures\\\\Camera Roll"
