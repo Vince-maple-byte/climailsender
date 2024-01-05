@@ -10,13 +10,16 @@ import java.io.IOException;
 
 public interface SendMail {
 
-    public void simpleMessage(@ShellOption(value = {"-m", "--message"},
-            defaultValue = "")String test) throws MessagingException;
+    public void simpleMessage(
+            @ShellOption(value = {"-m", "--message"}, defaultValue = "")String test) throws MessagingException;
     public void sendAttachments(
-            @ShellOption(value = {"-t", "--textFile"}, defaultValue = "") String fileInputLocation
+            @ShellOption(value = {"-t", "--textFile"}, defaultValue = "") String fileInputLocation,
+            @ShellOption(value = {"-d", "attachFolder"}, defaultValue = "") String attachFolder
     ) throws MessagingException, FileNotFoundException;
 
     public void sendHtml(@ShellOption(value = {"-h", "--html"}, defaultValue = "") String htmlText,
-                         @ShellOption(value = {"-a", "--attach"}, defaultValue = "false") boolean attach
+                         @ShellOption(value = {"-a", "--attach"}, defaultValue = "false") boolean attach,
+                         @ShellOption(value = {"-d", "--attachFolder"}, defaultValue = "") String attachFolder,
+                         @ShellOption(value = {"-i", "--inlineFolder"}, defaultValue = "") String inlineFolder
     ) throws MessagingException, IOException;
 }
